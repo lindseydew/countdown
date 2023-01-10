@@ -1,0 +1,14 @@
+.card {
+    border: 1px black solid;
+    padding: 50px 40px;
+    margin: 10px
+}
+
+.carddeck {
+    background-color: blue;
+    @extend .card;
+}
+
+.container {
+    display: flex;
+}
