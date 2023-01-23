@@ -7,6 +7,11 @@ describe("Solver", () => {
     expect(solver.solve()).toBe("1 + 2 + 3 + 4 + 5 + 6");
   });
 
+  it("should stop computing if a solution is found", () => {
+    const solver = new Solver(10, [1, 2, 3, 4, 5, 6]);
+    expect(solver.solve()).toBe("1 + 2 + 3 + 4");
+  });
+
   it("should return undefined if no solution", () => {
     const solver = new Solver(22, [1, 2, 3, 4, 5, 6]);
     expect(solver.solve()).toBe(undefined);
