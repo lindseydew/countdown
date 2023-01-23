@@ -1,14 +1,23 @@
 .card {
     border: 1px black solid;
-    padding: 50px 40px;
+    height: 80px;
+    width: 60px;
     margin: 10px
 }
 
-.carddeck {
+.facedown {
     background-color: blue;
-    @extend .card;
 }
 
 .container {
     display: flex;
+}
+
+.card-deck-stack {
+    display: grid;
+}
+
+.card-deck-stack > * {
+    grid-row: 1;
+    grid-column: 1;
 }

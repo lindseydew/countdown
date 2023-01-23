@@ -1,14 +1,14 @@
 import React from "react";
-import { CardSelected } from "./Card";
-import "./cardlist.scss";
+import { Card } from "./Card";
+import "./card.scss";
 
 export const CardList: () => JSX.Element = () => {
   return (
-    <div className="card-list">
+    <div className="container">
       {Array(6)
         .fill(0)
         .map((_) => {
-          return <CardSelected />;
+          return <Card facedown={false} />;
         })}
     </div>
   );

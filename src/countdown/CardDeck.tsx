@@ -1,6 +1,17 @@
 import React from "react";
+import { Card } from "./Card";
 import "./card.scss";
 
-export const CardDeck: () => JSX.Element = () => {
-  return <div className="carddeck"></div>;
+interface CardDeckProps {
+  values: number[];
+}
+
+export const CardDeck: (props: CardDeckProps) => JSX.Element = (props) => {
+  return (
+    <div className="card-deck-stack">
+      {props.values.map((v) => {
+        return <Card facedown={true} value={v} />;
+      })}
+    </div>
+  );
 };
