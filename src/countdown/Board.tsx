@@ -4,6 +4,7 @@ import "./card.scss";
 import { LARGE_VALUES, LITTLE_VALUES } from "../cardvalues";
 import { CardList } from "./CardList";
 
+// TODO - is this working as expected?
 const shuffledArray: (arr: number[]) => number[] = (arr) =>
   arr.sort((a, b) => 0.5 - Math.random());
 
@@ -14,25 +15,19 @@ const removeElementFromArray: (n: number, values: number[]) => number[] = (
   values
 ) => {
   const index = values.indexOf(n);
-  if (index > -1) values.splice(index, 1);
-  return values;
+  return values.filter((_, idx) => idx !== index);
 };
 export function Board() {
-  const [largeValues, setLargeValues] = useState<number[]>(
-    shuffledArray(LARGE_VALUES)
-  );
+  const [largeValues, setLargeValues] = useState<number[]>(LARGE_VALUES);
   const [littleValues, setLittleValues] = useState<number[]>(
     shuffledArray(LITTLE_VALUES)
   );
 
   const cardDroppedCallback: (n: number) => void = (n) => {
-    console.log("card dropped callback");
     if (isLittleValue(n)) {
       setLittleValues((values) => removeElementFromArray(n, values));
     } else {
-      console.log(largeValues);
       setLargeValues((values) => removeElementFromArray(n, values));
-      console.log(largeValues);
     }
   };
   return (
