@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Card } from "./Card";
+import React, { useEffect } from "react";
+import { Card, NumberType } from "./Card";
 import "./card.scss";
 
 interface CardDeckProps {
   values: number[];
+  numberType: NumberType;
 }
 
 export const CardDeck: (props: CardDeckProps) => JSX.Element = (props) => {
@@ -13,7 +14,9 @@ export const CardDeck: (props: CardDeckProps) => JSX.Element = (props) => {
 
   useEffect(() => {}, [props.values]);
   return (
+    
     <div className="card-deck-stack">
+      
       {props.values.map((value, index) => {
         return (
           <div onDragStart={(e) => dragStart(e, value)} draggable>

@@ -4,6 +4,7 @@ import "./card.scss";
 
 interface CardListProps {
   onCardDropped: (n: number) => void;
+  cardFaceDown: boolean;
 }
 
 export function CardList(props: CardListProps): JSX.Element {
@@ -11,7 +12,7 @@ export function CardList(props: CardListProps): JSX.Element {
 
   const drop: (e: React.DragEvent<HTMLDivElement>) => void = (e) => {
     const value = Number(e.dataTransfer.getData("value"));
-    setCards((cards) => [{ value: value, facedown: true }, ...cards]);
+    setCards((cards) => [...cards, { value: value, facedown: true }]);
     props.onCardDropped(value);
   };
 
@@ -21,7 +22,7 @@ export function CardList(props: CardListProps): JSX.Element {
   return (
     <div className="container">
       {cards.map((c, index) => (
-        <Card facedown={c.facedown} value={c.value} key={index} />
+        <Card facedown={props.cardFaceDown} value={c.value} key={index} />
       ))}
 
       {Array(6 - cards.length)

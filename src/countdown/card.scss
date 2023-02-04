@@ -5,14 +5,16 @@
     margin: 10px
 }
 
-.facedown {
-    background-color: white;
+.facedown-large {
+    background-color: lightblue;
 }
 
+.facedown-little {
+    background-color: pink;
+}
 .container {
     display: flex;
 }
-
 .card-deck-stack {
     display: grid;
 }
