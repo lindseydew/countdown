@@ -14,10 +14,8 @@ export const CardDeck: (props: CardDeckProps) => JSX.Element = (props) => {
 
   useEffect(() => {}, [props.values]);
   return (
-    
     <div className="card-deck-stack">
-      
-      {props.values.map((value, index) => {
+      {props.values.reverse().map((value, index) => {
         return (
           <div onDragStart={(e) => dragStart(e, value)} draggable>
             <Card facedown={true} value={value} key={index} />

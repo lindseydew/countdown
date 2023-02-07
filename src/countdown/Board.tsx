@@ -19,7 +19,7 @@ const removeElementFromArray: (n: number, values: number[]) => number[] = (
   n,
   values
 ) => {
-  const index = values.indexOf(n);
+  const index = values.lastIndexOf(n);
   return values.filter((_, idx) => idx !== index);
 };
 export function Board() {
@@ -43,7 +43,6 @@ export function Board() {
     } else {
       setLargeValues((values) => removeElementFromArray(n, values));
     }
-    console.log([...largeValues, ...littleValues].length);
     // TODO -> should this be a callback?
     if ([...largeValues, ...littleValues].length <= 19) {
       setCanStartGame(true);

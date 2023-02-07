@@ -8,11 +8,10 @@ interface CardListProps {
 }
 
 export function CardList(props: CardListProps): JSX.Element {
-  const [cards, setCards] = useState<CardProps[]>([]);
-
+  const [values, setValues] = useState<number[]>([]);
   const drop: (e: React.DragEvent<HTMLDivElement>) => void = (e) => {
     const value = Number(e.dataTransfer.getData("value"));
-    setCards((cards) => [...cards, { value: value, facedown: true }]);
+    setValues((values) => [...values, value]);
     props.onCardDropped(value);
   };
 
@@ -21,11 +20,11 @@ export function CardList(props: CardListProps): JSX.Element {
   };
   return (
     <div className="container">
-      {cards.map((c, index) => (
-        <Card facedown={props.cardFaceDown} value={c.value} key={index} />
+      {values.map((v, index) => (
+        <Card facedown={props.cardFaceDown} value={v} key={index} />
       ))}
 
-      {Array(6 - cards.length)
+      {Array(6 - values.length)
         .fill(0)
         .map((_, index) => {
           return (
