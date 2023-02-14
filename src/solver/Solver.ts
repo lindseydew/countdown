@@ -7,10 +7,10 @@ export class Solver {
     restOfValues: number[],
     operation: Operation
   ): Expression | undefined {
-    if (operation.value === this.target) {
-      return operation;
-    } else if (restOfValues.length === 0) {
+    if (restOfValues.length === 0) {
       return undefined;
+    } else if (restOfValues.length === 1) {
+      return new Operation(operation, new Literal(restOfValues[0]), "+");
     } else {
       return this.solverRec(
         restOfValues.splice(1),
@@ -18,25 +18,23 @@ export class Solver {
       );
     }
   }
-  solve(): Expression[] {
-    const startValue = this.sortedValues[0];
 
-    const solutions: (Expression | undefined)[] = this.sortedValues.map(
-      (v, idx) => {
-        if (idx === 0) {
-          return undefined;
-        } else {
-          return this.solverRec(
-            this.sortedValues.filter((_, i) => i === idx),
-            new Operation(
-              new Literal(startValue),
-              new Literal(this.sortedValues[v]),
-              "+"
-            )
-          );
-        }
-      }
-    );
+
+  solve(): Expression[] {
+    const solutions: (Expression | undefined)[] = this.sortedValues
+      .map((v1, i) => {
+        return this.sortedValues.map((v2, j) => {
+          if (j > i) {
+            return this.solverRec(
+              this.sortedValues.filter((_, idx) => idx !== i && idx !== j),
+              new Operation(new Literal(v1), new Literal(v2), "+")
+            );
+          } else return undefined;
+        });
+      })
+      .reduce<(Expression | undefined)[]>((acc, curVal) => {
+        return acc.concat(curVal);
+      }, []);
 
     return solutions.reduce<Expression[]>((prev, current) => {
       if (current !== undefined) {
@@ -60,12 +58,16 @@ export class Solver {
 //     constructor()
 // }
 
+// MOVE TO OWN FILE
+
 export interface Expression {
   prettyPrint: string;
   value: number;
   valid: boolean;
-}
 
+  //add(n: number) = new Operation(this, new Literal(n), "+")
+}
+// make a class, maybe abstract -> figure out
 export function isOperationType(value: Expression): value is Operation {
   return "operation" in value;
 }
