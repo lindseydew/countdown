@@ -1,0 +1,33 @@
+.card {
+  border: 1px black solid;
+  height: 80px;
+  width: 60px;
+  margin: 10px;
+}
+
+.facedown-large {
+  background-color: lightblue;
+}
+
+.facedown-little {
+  background-color: pink;
+}
+
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.card-deck-stack {
+  display: -ms-grid;
+  display: grid;
+}
+
+.card-deck-stack > * {
+  -ms-grid-row: 1;
+  grid-row: 1;
+  -ms-grid-column: 1;
+  grid-column: 1;
+}
+/*# sourceMappingURL=card.css.map */
