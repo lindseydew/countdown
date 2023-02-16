@@ -11,6 +11,8 @@ export class Solver {
   ): Expression | undefined {
     if (restOfValues.length === 0) {
       return undefined;
+    } else if (operation.value === this.target) {
+      return operation;
     } else if (restOfValues.length === 1) {
       return new Operation(operation, new Literal(restOfValues[0]), "+");
     } else {
@@ -20,7 +22,6 @@ export class Solver {
       );
     }
   }
-
 
   solve(): Expression[] {
     const solutions: (Expression | undefined)[] = this.sortedValues
@@ -38,12 +39,12 @@ export class Solver {
         return acc.concat(curVal);
       }, []);
 
-    return solutions.reduce<Expression[]>((prev, current) => {
-      if (current !== undefined) {
-        return [...prev, current];
-      } else return prev;
-    }, []);
+    return solutions
+      .reduce<Expression[]>((prev, current) => {
+        if (current !== undefined) {
+          return [...prev, current];
+        } else return prev;
+      }, [])
+      .filter((e) => e.value === this.target);
   }
 }
-
-

@@ -45,11 +45,9 @@ describe("Solver", () => {
       new Literal(2).add(1).add(5).add(4).add(3),
     ]);
   });
-  it.skip("should only show valid solutions", () => {
+  it("should only show valid solutions", () => {
     const solver = new Solver(4, [1, 2, 3]);
-    expect(solver.solve()).toStrictEqual([
-      new Operation(new Literal(3), new Literal(1), "+"),
-    ]);
+    expect(solver.solve()).toStrictEqual([new Literal(3).add(1)]);
   });
 });
 
