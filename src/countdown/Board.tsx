@@ -5,6 +5,9 @@ import { LARGE_VALUES, LITTLE_VALUES } from "../cardvalues";
 import { CardList } from "./CardList";
 import { Target } from "./Target";
 import { StartGame } from "./StartGame";
+import { ShowSolutionsButton } from "./ShowSolutionsButton";
+import { ShowSolutions } from "./ShowSolutions";
+import { Solver } from "../solver/Solver";
 
 function generateTarget(): number {
   return Math.floor(Math.random() * 900) + 100;
@@ -27,21 +30,43 @@ export function Board() {
   const [littleValues, setLittleValues] = useState<number[]>(
     shuffledArray(LITTLE_VALUES)
   );
+  const [selectedValues, setSelectedValues] = useState<number[]>([]);
   const [canStartGame, setCanStartGame] = useState<boolean>(false);
+  const [gameHasStarted, setGameHasStarted] = useState<boolean>(false);
   const [target, setTarget] = useState<number | undefined>(undefined);
   const [cardFaceDown, setCardFaceDown] = useState<boolean>(true);
+  const [solutions, setSolutions] = useState<string[]>([]);
 
   const onStartGameClick: () => void = () => {
     setTarget(generateTarget());
     setCardFaceDown(false);
     setCanStartGame(false);
+    setGameHasStarted(true);
   };
 
+  const onShowSolutionsClick: () => void = () => {
+    console.log("CLICK???");
+    console.log(target);
+    if (target !== undefined) {
+      console.log("VALUES");
+      console.log(selectedValues);
+      const solver = new Solver(target, selectedValues);
+      const expressions = solver.solve();
+      console.log(expressions);
+      const solutions = expressions.map((s) => s.prettyPrint);
+      console.log("****");
+      console.log(solutions);
+      console.log("====");
+      setSolutions(solutions);
+    }
+  };
   const cardDroppedCallback: (n: number) => void = (n) => {
     if (isLittleValue(n)) {
       setLittleValues((values) => removeElementFromArray(n, values));
+      setSelectedValues((values) => [...values, n]);
     } else {
       setLargeValues((values) => removeElementFromArray(n, values));
+      setSelectedValues((values) => [...values, n]);
     }
     // TODO -> should this be a callback?
     if ([...largeValues, ...littleValues].length <= 19) {
@@ -60,11 +85,16 @@ export function Board() {
           canStartGame={canStartGame}
           onStartGameClick={onStartGameClick}
         />
+        <ShowSolutionsButton
+          gameHasStarted={gameHasStarted}
+          onShowSolutionsClick={onShowSolutionsClick}
+        />
       </>
       <div className="container">
         <CardDeck values={littleValues} numberType={"little"} key={1} />
         <CardDeck values={largeValues} numberType={"large"} key={2} />
       </div>
+      <ShowSolutions solutions={solutions} />
     </>
   );
 }

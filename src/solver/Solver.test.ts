@@ -49,6 +49,7 @@ describe("Solver", () => {
     });
 
     it("list size 3, choose 2 elements", () => {
+      // todo - is there a nicer way to output the strings?
       expect(
         Solver.generateExpressionsOfSize([1, 2, 3], 2).map((s) => s.prettyPrint)
       ).toStrictEqual(

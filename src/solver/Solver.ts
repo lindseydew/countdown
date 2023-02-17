@@ -79,7 +79,7 @@ export class Solver {
   }
 
   solve(): Expression[] {
-    return Solver.generateAllExpressions(this.sortedValues).filter(
+    return Solver.generateAllExpressions(this.values).filter(
       (e) => e.value === this.target
     );
   }
