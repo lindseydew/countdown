@@ -45,18 +45,10 @@ export function Board() {
   };
 
   const onShowSolutionsClick: () => void = () => {
-    console.log("CLICK???");
-    console.log(target);
     if (target !== undefined) {
-      console.log("VALUES");
-      console.log(selectedValues);
       const solver = new Solver(target, selectedValues);
       const expressions = solver.solve();
-      console.log(expressions);
       const solutions = expressions.map((s) => s.prettyPrint);
-      console.log("****");
-      console.log(solutions);
-      console.log("====");
       setSolutions(solutions);
     }
   };

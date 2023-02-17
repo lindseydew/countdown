@@ -1,4 +1,3 @@
-import { s } from "vitest/dist/env-afee91f0";
 import { Expression, Literal, Operation } from "./models/Expression";
 import { Add, Divide, Multiply, Subtract } from "./models/OperationType";
 
@@ -9,7 +8,7 @@ function choose(arr: number[], k: number, prefix: number[] = []): number[][] {
 export class Solver {
   sortedValues: number[];
   constructor(readonly target: number, readonly values: number[]) {
-    this.sortedValues = values.sort().reverse();
+    this.sortedValues = values.sort((a, b) => b - a);
   }
 
   static generateAllExpressions(values: number[]): Expression[] {
@@ -23,8 +22,7 @@ export class Solver {
     values: number[],
     size: number
   ): Expression[] {
-    const sortedValues = values.sort().reverse();
-    const combos = choose(sortedValues, size);
+    const combos = choose(values, size);
     return combos.flatMap((subList) => {
       return this.combineExpressionRec(
         subList.filter((_, idx) => idx != 0),
@@ -79,7 +77,7 @@ export class Solver {
   }
 
   solve(): Expression[] {
-    return Solver.generateAllExpressions(this.values).filter(
+    return Solver.generateAllExpressions(this.sortedValues).filter(
       (e) => e.value === this.target
     );
   }
