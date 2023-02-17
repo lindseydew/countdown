@@ -1,6 +1,7 @@
 import { it, describe, expect } from "vitest";
 import { Solver } from "./Solver";
 import { Literal, Operation } from "./models/Expression";
+import { Add } from "./models/Expression";
 
 describe("Solver", () => {
   it("sortDesc should put the numbers high to low", () => {
@@ -55,16 +56,16 @@ describe("Expression", () => {
   describe("prettyPrint", () => {
     it("addition with two numbers", () => {
       expect(
-        new Operation(new Literal(1), new Literal(2), "+").prettyPrint
+        new Operation(new Literal(1), new Literal(2), new Add()).prettyPrint
       ).toBe("1 + 2");
     });
 
     it("addition with a nested expression", () => {
       expect(
         new Operation(
-          new Operation(new Literal(1), new Literal(2), "+"),
+          new Operation(new Literal(1), new Literal(2), new Add()),
           new Literal(3),
-          "+"
+          new Add()
         ).prettyPrint
       ).toBe("(1 + 2) + 3");
     });
@@ -72,14 +73,16 @@ describe("Expression", () => {
 
   describe("value", () => {
     it("addition with two numbers", () => {
-      expect(new Operation(new Literal(1), new Literal(2), "+").value).toBe(3);
+      expect(
+        new Operation(new Literal(1), new Literal(2), new Add()).value
+      ).toBe(3);
     });
     it("addition with a nested expression", () => {
       expect(
         new Operation(
-          new Operation(new Literal(1), new Literal(2), "+"),
+          new Operation(new Literal(1), new Literal(2), new Add()),
           new Literal(3),
-          "+"
+          new Add()
         ).value
       ).toBe(6);
     });

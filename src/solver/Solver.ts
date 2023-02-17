@@ -1,4 +1,4 @@
-import { Expression, Literal, Operation } from "./models/Expression";
+import { Add, Expression, Literal, Operation } from "./models/Expression";
 
 export class Solver {
   sortedValues: number[];
@@ -14,11 +14,11 @@ export class Solver {
     } else if (operation.value === this.target) {
       return operation;
     } else if (restOfValues.length === 1) {
-      return new Operation(operation, new Literal(restOfValues[0]), "+");
+      return new Operation(operation, new Literal(restOfValues[0]), new Add());
     } else {
       return this.solverRec(
         restOfValues.splice(1),
-        new Operation(operation, new Literal(restOfValues[0]), "+")
+        new Operation(operation, new Literal(restOfValues[0]), new Add())
       );
     }
   }
@@ -30,7 +30,7 @@ export class Solver {
           if (j > i) {
             return this.solverRec(
               this.sortedValues.filter((_, idx) => idx !== i && idx !== j),
-              new Operation(new Literal(v1), new Literal(v2), "+")
+              new Operation(new Literal(v1), new Literal(v2), new Add())
             );
           } else return undefined;
         });
