@@ -7,12 +7,15 @@ export abstract class Expression {
     return new Operation(this, new Literal(n), new Add());
   }
 }
+
+// TODO -> how can I do a more robust type guard?
+// using a string version of a field is not great.
 export function isOperationType(value: Expression): value is Operation {
-  return "operation" in value;
+  return "binOp" in value;
 }
 
 export function isLiteralType(value: Expression): value is Literal {
-  return !("operation" in value);
+  return !("binOp" in value);
 }
 export class Literal extends Expression {
   prettyPrint: string;
@@ -34,7 +37,6 @@ export class Operation extends Expression {
     readonly binOp: BinOp
   ) {
     super();
-    this.value = exp1.value + exp2.value;
     this.valid = true;
     const expToString = (exp: Expression) => {
       return isOperationType(exp) ? `(${exp.prettyPrint})` : `${exp.value}`;
