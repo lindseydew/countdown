@@ -8,47 +8,76 @@ describe("Solver", () => {
     const solver = new Solver(21, [1, 2, 3, 4, 5, 6]);
     expect(solver.sortedValues).toStrictEqual([6, 5, 4, 3, 2, 1]);
   });
-  it("should be able to solve with addition with 3", () => {
+
+  describe("generateExpressionsOfSize", () => {
+    it("list size 1, choose 1 element", () => {
+      expect(Solver.generateExpressionsOfSize([1], 1)).toStrictEqual([
+        new Literal(1),
+      ]);
+    });
+    it("list size 2, choose 2 elements", () => {
+      expect(Solver.generateExpressionsOfSize([1, 2], 2)).toStrictEqual([
+        new Literal(2).add(1),
+        new Literal(2).subtract(1),
+        new Literal(2).multiply(1),
+        new Literal(2).divide(1),
+      ]);
+    });
+
+    it("list size 3, choose 3 elements", () => {
+      expect(Solver.generateExpressionsOfSize([1, 2, 3], 3)).toStrictEqual([
+        new Literal(3).add(2).add(1),
+        new Literal(3).add(2).subtract(1),
+        new Literal(3).add(2).multiply(1),
+        new Literal(3).add(2).divide(1),
+
+        new Literal(3).subtract(2).add(1),
+        new Literal(3).subtract(2).subtract(1),
+        new Literal(3).subtract(2).multiply(1),
+        new Literal(3).subtract(2).divide(1),
+
+        new Literal(3).multiply(2).add(1),
+        new Literal(3).multiply(2).subtract(1),
+        new Literal(3).multiply(2).multiply(1),
+        new Literal(3).multiply(2).divide(1),
+
+        new Literal(3).divide(2).add(1),
+        new Literal(3).divide(2).subtract(1),
+        new Literal(3).divide(2).multiply(1),
+        new Literal(3).divide(2).divide(1),
+      ]);
+    });
+
+    it("list size 3, choose 2 elements", () => {
+      expect(
+        Solver.generateExpressionsOfSize([1, 2, 3], 2).map((s) => s.prettyPrint)
+      ).toStrictEqual(
+        [
+          new Literal(3).add(2),
+          new Literal(3).subtract(2),
+          new Literal(3).multiply(2),
+          new Literal(3).divide(2),
+
+          new Literal(3).add(1),
+          new Literal(3).subtract(1),
+          new Literal(3).multiply(1),
+          new Literal(3).divide(1),
+
+          new Literal(2).add(1),
+          new Literal(2).subtract(1),
+          new Literal(2).multiply(1),
+          new Literal(2).divide(1),
+        ].map((s) => s.prettyPrint)
+      );
+    });
+  });
+  it("should only show expressions where the value is the target", () => {
     const solver = new Solver(6, [1, 2, 3]);
     expect(solver.solve()).toStrictEqual([
+      new Literal(3).multiply(2),
       new Literal(3).add(2).add(1),
-      new Literal(3).add(1).add(2),
-      new Literal(2).add(1).add(3),
+      new Literal(3).multiply(2).multiply(1),
     ]);
-  });
-
-  it("should be able to solve with addition with 4", () => {
-    const solver = new Solver(10, [1, 2, 3, 4]);
-
-    expect(solver.solve()).toStrictEqual([
-      new Literal(4).add(3).add(2).add(1),
-      new Literal(4).add(2).add(3).add(1),
-      new Literal(4).add(1).add(3).add(2),
-      new Literal(3).add(2).add(4).add(1),
-      new Literal(3).add(1).add(4).add(2),
-      new Literal(2).add(1).add(4).add(3),
-    ]);
-  });
-
-  it("should be able to solve with addition with 5 elements", () => {
-    const solver = new Solver(15, [1, 2, 3, 4, 5]);
-
-    expect(solver.solve()).toStrictEqual([
-      new Literal(5).add(4).add(3).add(2).add(1),
-      new Literal(5).add(3).add(4).add(2).add(1),
-      new Literal(5).add(2).add(4).add(3).add(1),
-      new Literal(5).add(1).add(4).add(3).add(2),
-      new Literal(4).add(3).add(5).add(2).add(1),
-      new Literal(4).add(2).add(5).add(3).add(1),
-      new Literal(4).add(1).add(5).add(3).add(2),
-      new Literal(3).add(2).add(5).add(4).add(1),
-      new Literal(3).add(1).add(5).add(4).add(2),
-      new Literal(2).add(1).add(5).add(4).add(3),
-    ]);
-  });
-  it("should only show valid solutions", () => {
-    const solver = new Solver(4, [1, 2, 3]);
-    expect(solver.solve()).toStrictEqual([new Literal(3).add(1)]);
   });
 });
 

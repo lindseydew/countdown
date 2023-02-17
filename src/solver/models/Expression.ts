@@ -1,4 +1,10 @@
-import { Add, OperationType } from "./OperationType";
+import {
+  Add,
+  Divide,
+  Multiply,
+  OperationType,
+  Subtract,
+} from "./OperationType";
 
 export abstract class Expression {
   abstract prettyPrint: string;
@@ -7,6 +13,18 @@ export abstract class Expression {
 
   add(n: number): Operation {
     return new Operation(this, new Literal(n), new Add());
+  }
+
+  subtract(n: number): Operation {
+    return new Operation(this, new Literal(n), new Subtract());
+  }
+
+  multiply(n: number): Operation {
+    return new Operation(this, new Literal(n), new Multiply());
+  }
+
+  divide(n: number): Operation {
+    return new Operation(this, new Literal(n), new Divide());
   }
 }
 
