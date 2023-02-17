@@ -1,7 +1,7 @@
 import { it, describe, expect } from "vitest";
 import { Solver } from "./Solver";
 import { Literal, Operation } from "./models/Expression";
-import { Add } from "./models/Expression";
+import { Add } from "./models/OperationType";
 
 describe("Solver", () => {
   it("sortDesc should put the numbers high to low", () => {

@@ -1,4 +1,5 @@
-import { Add, Expression, Literal, Operation } from "./models/Expression";
+import { Expression, Literal, Operation } from "./models/Expression";
+import { Add } from "./models/OperationType";
 
 export class Solver {
   sortedValues: number[];
