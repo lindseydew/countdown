@@ -5,5 +5,9 @@ interface TargetProps {
 }
 
 export const Target: (props: TargetProps) => JSX.Element = (props) => {
-  return <div className="target">{props.value}</div>;
+  return (
+    <div className="target">
+      {props.value ? <div data-testid="targetValue">{props.value}</div> : <></>}
+    </div>
+  );
 };

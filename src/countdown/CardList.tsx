@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-import { CardPlaceholder, Card, CardProps } from "./Card";
+import React from "react";
+import { CardPlaceholder, Card } from "./Card";
 import "./card.scss";
 
 interface CardListProps {
   onCardDropped: (n: number) => void;
   cardFaceDown: boolean;
+  values: number[];
 }
 
 export function CardList(props: CardListProps): JSX.Element {
-  const [values, setValues] = useState<number[]>([]);
   const drop: (e: React.DragEvent<HTMLDivElement>) => void = (e) => {
     const value = Number(e.dataTransfer.getData("value"));
-    setValues((values) => [...values, value]);
     props.onCardDropped(value);
   };
 
@@ -20,11 +19,13 @@ export function CardList(props: CardListProps): JSX.Element {
   };
   return (
     <div className="container">
-      {values.map((v, index) => (
-        <Card facedown={props.cardFaceDown} value={v} key={index} />
+      {props.values.map((v, index) => (
+        <div data-testid="card-selected">
+          <Card facedown={props.cardFaceDown} value={v} key={index} />
+        </div>
       ))}
 
-      {Array(6 - values.length)
+      {Array(6 - props.values.length)
         .fill(0)
         .map((_, index) => {
           return (

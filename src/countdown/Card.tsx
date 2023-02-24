@@ -17,5 +17,5 @@ export const Card: (props: CardProps) => JSX.Element = (props) => {
 };
 
 export const CardPlaceholder: () => JSX.Element = () => {
-  return <div className="card"></div>;
+  return <div className="card" data-testid="card-placeholder"></div>;
 };

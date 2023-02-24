@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CardDeck } from "./CardDeck";
 import "./card.scss";
 import { LARGE_VALUES, LITTLE_VALUES } from "../cardvalues";
 import { CardList } from "./CardList";
 import { Target } from "./Target";
-import { StartGame } from "./StartGame";
-import { ShowSolutionsButton } from "./ShowSolutionsButton";
 import { ShowSolutions } from "./ShowSolutions";
 import { Solver } from "../solver/Solver";
+import { Button } from "./Button";
 
 function generateTarget(): number {
   return Math.floor(Math.random() * 900) + 100;
@@ -60,17 +59,20 @@ export function Board() {
     if (gameState === GameState.setUp) {
       if (isLittleValue(n)) {
         setLittleValues((values) => removeElementFromArray(n, values));
-        setSelectedValues((values) => [...values, n]);
       } else {
         setLargeValues((values) => removeElementFromArray(n, values));
-        setSelectedValues((values) => [...values, n]);
       }
-      // TODO -> should this be a callback?
-      if ([...largeValues, ...littleValues].length <= 19) {
-        setGameState(GameState.readyToPlay);
-      }
+      // don't have call backs on setState hook -> use useEffect instead
+      setSelectedValues((values) => [...values, n]);
     }
   };
+
+  useEffect(() => {
+    if (selectedValues.length === 6 && gameState === GameState.setUp) {
+      setGameState(GameState.readyToPlay);
+    }
+  }, [selectedValues]);
+
   return (
     <>
       <>
@@ -80,14 +82,18 @@ export function Board() {
           cardFaceDown={
             gameState === GameState.setUp || gameState === GameState.readyToPlay
           }
+          values={selectedValues}
         />
-        <StartGame
-          canStartGame={gameState === GameState.readyToPlay}
-          onStartGameClick={onStartGameClick}
+
+        <Button
+          display={gameState === GameState.readyToPlay}
+          clickHandler={onStartGameClick}
+          text="Start Game"
         />
-        <ShowSolutionsButton
-          gameHasStarted={gameState === GameState.playing}
-          onShowSolutionsClick={onShowSolutionsClick}
+        <Button
+          display={gameState === GameState.playing}
+          clickHandler={onShowSolutionsClick}
+          text="Show Solutions"
         />
       </>
       <div className="container">
