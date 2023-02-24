@@ -11,11 +11,10 @@ const isCatFact = (obj: unknown) =>
   typeof obj === "object" && obj !== null && "fact" in obj;
 
 export function FetchMockExample(): JSX.Element {
-    
   const [data, setData] = useState<CatFact | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hasErrors, setHasErrors] = useState<boolean>(false);
-
+  // try and get this working with just fetch, then add a fetchWithDefaultParams
   useEffect(() => {
     fetch("https://catfact.ninja/fact")
       .then((r) => r.json())
