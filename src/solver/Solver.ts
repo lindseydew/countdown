@@ -37,7 +37,9 @@ export class Solver {
   ): Expression[] {
     if (restOfValues.length === 0) {
       return [exp];
-    } else
+    }
+    // make a list of the operations and map over it.
+    else
       return [
         this.combineExpressionRec(
           restOfValues.filter((_, idx) => idx !== 0),

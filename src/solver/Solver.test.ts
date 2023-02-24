@@ -36,48 +36,73 @@ describe("Solver", () => {
       ]);
     });
 
-    it("list size 3, choose 3 elements", () => {
-      expect(Solver.generateExpressionsOfSize([3, 2, 1], 3)).toStrictEqual([
-        new Literal(3).add(2).add(1),
-        new Literal(3).add(2).subtract(1),
-        new Literal(3).add(2).multiply(1),
-        new Literal(3).add(2).divide(1),
+    // missing bracket
+    // (4 op 3) op (2 op 1)
 
-        new Literal(3).subtract(2).add(1),
-        new Literal(3).subtract(2).subtract(1),
-        new Literal(3).subtract(2).multiply(1),
-        new Literal(3).subtract(2).divide(1),
+    // [3, 2, 1],
 
-        new Literal(3).multiply(2).add(1),
-        new Literal(3).multiply(2).subtract(1),
-        new Literal(3).multiply(2).multiply(1),
-        new Literal(3).multiply(2).divide(1),
+    // choose 2 elements
 
-        new Literal(3).divide(2).add(1),
-        new Literal(3).divide(2).subtract(1),
-        new Literal(3).divide(2).multiply(1),
-        new Literal(3).divide(2).divide(1),
+    // (3,2), (3 ,1) (2, 1)
+    // 3 + 2 = 5 => (3,1)
+    // 3 - 2 = 1 => (1,1)
+    // 3 * 2 = 12 => (12,1)
+    // 3 / 2 = 1 => (1.5,1)
 
-        new Literal(3).add(1).add(2),
-        new Literal(3).add(1).subtract(2),
-        new Literal(3).add(1).multiply(2),
-        new Literal(3).add(1).divide(2),
+    // given a list => produce the correct tuples after one step
+    // (3, 2, 1) => list of remaining values
+    
+    // (3,2,1) =>  [3 + 2, [1], 3 - 2, [1]]
+    it.only("list size 3, choose 3 elements", () => {
+      expect(
+        Solver.generateExpressionsOfSize([3, 2, 1], 3).map((s) => s.prettyPrint)
+      ).toStrictEqual(
+        [
+          // 3 op 2 op 1
+          new Literal(3).add(2).add(1),
+          new Literal(3).add(2).subtract(1),
+          new Literal(3).add(2).multiply(1),
+          new Literal(3).add(2).divide(1),
 
-        new Literal(3).subtract(1).add(2),
-        new Literal(3).subtract(1).subtract(2),
-        new Literal(3).subtract(1).multiply(2),
-        new Literal(3).subtract(1).divide(2),
+          new Literal(3).subtract(2).add(1),
+          new Literal(3).subtract(2).subtract(1),
+          new Literal(3).subtract(2).multiply(1),
+          new Literal(3).subtract(2).divide(1),
 
-        new Literal(3).multiply(1).add(2),
-        new Literal(3).multiply(1).subtract(2),
-        new Literal(3).multiply(1).multiply(2),
-        new Literal(3).multiply(1).divide(2),
+          new Literal(3).multiply(2).add(1),
+          new Literal(3).multiply(2).subtract(1),
+          new Literal(3).multiply(2).multiply(1),
+          new Literal(3).multiply(2).divide(1),
 
-        new Literal(3).divide(1).add(2),
-        new Literal(3).divide(1).subtract(2),
-        new Literal(3).divide(1).multiply(2),
-        new Literal(3).divide(1).divide(2),
-      ]);
+          new Literal(3).divide(2).add(1),
+          new Literal(3).divide(2).subtract(1),
+          new Literal(3).divide(2).multiply(1),
+          new Literal(3).divide(2).divide(1),
+
+          // 3 op 1 op 2
+          new Literal(3).add(1).add(2),
+          new Literal(3).add(1).subtract(2),
+          new Literal(3).add(1).multiply(2),
+          new Literal(3).add(1).divide(2),
+
+          new Literal(3).subtract(1).add(2),
+          new Literal(3).subtract(1).subtract(2),
+          new Literal(3).subtract(1).multiply(2),
+          new Literal(3).subtract(1).divide(2),
+
+          new Literal(3).multiply(1).add(2),
+          new Literal(3).multiply(1).subtract(2),
+          new Literal(3).multiply(1).multiply(2),
+          new Literal(3).multiply(1).divide(2),
+
+          new Literal(3).divide(1).add(2),
+          new Literal(3).divide(1).subtract(2),
+          new Literal(3).divide(1).multiply(2),
+          new Literal(3).divide(1).divide(2),
+
+          // allow  
+        ].map((s) => s.prettyPrint)
+      );
 
       it("list size 3, choose 2 elements", () => {
         // todo - is there a nicer way to output the strings?
@@ -114,7 +139,14 @@ describe("Solver", () => {
         expect(Solver.generateAllExpressions([1, 2]).length).toBe(6);
       });
       it("list size 3", () => {
+        // ensure they are all distinct
         expect(Solver.generateAllExpressions([1, 2, 3]).length).toBe(51);
+      });
+      it("list size 6", () => {
+        // ensure they are all distinct
+        expect(Solver.generateAllExpressions([1, 2, 3, 4, 5, 6]).length).toBe(
+          3516060
+        );
       });
     });
   });
