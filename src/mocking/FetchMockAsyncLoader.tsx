@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { asyncLoader, LoadingState } from "./AsyncLoader";
 import { CatFactDisplay } from "./CatFactDisplay";
 import { ErrorPage } from "./ErrorPage";
+import { fetchWithDefaultParameters } from "./fetchWithDefaultParams";
 import { Loading } from "./Loading";
 
 export interface CatFact {
@@ -14,7 +15,7 @@ function isCatFact(obj: unknown): obj is CatFact {
 
 export function FetchMockAsyncLoader(): JSX.Element {
   const { data, loadingState } = asyncLoader<CatFact>(isCatFact, () =>
-    fetch("http://catfact.ninja/fact")
+    fetchWithDefaultParameters("http://catfact.ninja/fact")
   );
   if (loadingState === LoadingState.isLoading) {
     return <Loading text="Cat facts" />;
