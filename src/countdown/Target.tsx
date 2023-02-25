@@ -7,7 +7,7 @@ interface TargetProps {
 export const Target: (props: TargetProps) => JSX.Element = (props) => {
   return (
     <div className="target">
-      {props.value ? <div data-testid="targetValue">{props.value}</div> : <></>}
+      {props.value ? <div data-cy="targetValue">{props.value}</div> : <></>}
     </div>
   );
 };

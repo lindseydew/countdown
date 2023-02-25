@@ -17,7 +17,11 @@ export const CardDeck: (props: CardDeckProps) => JSX.Element = (props) => {
     <div className="card-deck-stack">
       {props.values.reverse().map((value, index) => {
         return (
-          <div onDragStart={(e) => dragStart(e, value)} draggable>
+          <div
+            onDragStart={(e) => dragStart(e, value)}
+            draggable
+            data-cy={`card-pile-${props.numberType}-${index}`}
+          >
             <Card facedown={true} value={value} key={index} />
           </div>
         );

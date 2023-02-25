@@ -16,6 +16,8 @@ export const Card: (props: CardProps) => JSX.Element = (props) => {
   );
 };
 
-export const CardPlaceholder: () => JSX.Element = () => {
-  return <div className="card" data-testid="card-placeholder"></div>;
+export const CardPlaceholder: ({ index }: { index: number }) => JSX.Element = ({
+  index,
+}) => {
+  return <div className="card" data-cy={`card-placeholder-${index}`}></div>;
 };

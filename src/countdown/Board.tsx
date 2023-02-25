@@ -89,11 +89,13 @@ export function Board() {
           display={gameState === GameState.readyToPlay}
           clickHandler={onStartGameClick}
           text="Start Game"
+          id="start-game"
         />
         <Button
           display={gameState === GameState.playing}
           clickHandler={onShowSolutionsClick}
           text="Show Solutions"
+          id="show-solutions"
         />
       </>
       <div className="container">

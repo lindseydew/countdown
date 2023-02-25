@@ -20,17 +20,16 @@ export function CardList(props: CardListProps): JSX.Element {
   return (
     <div className="container">
       {props.values.map((v, index) => (
-        <div data-testid="card-selected">
+        <div data-cy={`card-selected-${index}`}>
           <Card facedown={props.cardFaceDown} value={v} key={index} />
         </div>
       ))}
-
       {Array(6 - props.values.length)
         .fill(0)
         .map((_, index) => {
           return (
             <div onDrop={(e) => drop(e)} onDragOver={(e) => allowDrop(e)}>
-              <CardPlaceholder key={index} />
+              <CardPlaceholder key={index} index={index} />
             </div>
           );
         })}
