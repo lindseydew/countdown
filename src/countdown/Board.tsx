@@ -39,7 +39,7 @@ export function Board() {
   const [selectedValues, setSelectedValues] = useState<number[]>([]);
   const [target, setTarget] = useState<number | undefined>(undefined);
   const [gameState, setGameState] = useState<GameState>(GameState.setUp);
-  const [solutions, setSolutions] = useState<string[]>([]);
+  const [solver, setSolver] = useState<Solver | undefined>(undefined);
 
   const onStartGameClick: () => void = () => {
     setTarget(generateTarget());
@@ -48,12 +48,10 @@ export function Board() {
 
   const onShowSolutionsClick: () => void = () => {
     if (target !== undefined) {
-      const solver = new Solver(target, selectedValues);
-      const expressions = solver.solve();
-      const solutions = expressions.map((s) => s.prettyPrint);
-      setSolutions(solutions);
+      setSolver(new Solver(target, selectedValues));
+      setGameState(GameState.finished);
     }
-    setGameState(GameState.finished);
+    // else error?
   };
   const cardDroppedCallback: (n: number) => void = (n) => {
     if (gameState === GameState.setUp) {
@@ -102,7 +100,7 @@ export function Board() {
         <CardDeck values={littleValues} numberType={"little"} key={1} />
         <CardDeck values={largeValues} numberType={"large"} key={2} />
       </div>
-      <ShowSolutions solutions={solutions} />
+      <ShowSolutions solver={solver} />
     </>
   );
 }

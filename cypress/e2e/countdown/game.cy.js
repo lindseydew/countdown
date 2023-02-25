@@ -5,6 +5,7 @@ describe("countdown game", () => {
   });
   const selectACard = (index, pile) => {
     const dataTransfer = new DataTransfer();
+    // cypress isn't handling the cards on top of each other here
     cy.get(`[data-cy="card-pile-${pile}-${index}"]`).trigger("dragstart", {
       dataTransfer,
       force: true,
@@ -15,6 +16,16 @@ describe("countdown game", () => {
     });
   };
 
+  const removeACard = (index, pile) => {
+    const dataTransfer = new DataTransfer();
+    cy.get(`[data-cy="card-selected-${index}"]`).trigger("dragstart", {
+      dataTransfer,
+    });
+    cy.get(`[data-cy="card-pile-${pile}-${index}"]`).trigger("drop", {
+      dataTransfer,
+      force: true,
+    });
+  };
   const makeCardSelection = () => {
     Array(6)
       .fill(0)
@@ -25,6 +36,10 @@ describe("countdown game", () => {
 
   const playGame = () => {
     cy.get('[data-cy="start-game"]').click();
+  };
+
+  const showSolutions = () => {
+    cy.get('[data-cy="show-solutions"]').click();
   };
   describe("initial load of the game", () => {
     it("should have an empty target box", () => {
@@ -39,6 +54,9 @@ describe("countdown game", () => {
     });
     it("should have show solutions button disabled", () => {
       cy.get('[data-cy="show-solutions"]').should("be.disabled");
+    });
+    it("should not display the solutions div", () => {
+      cy.get('[data-cy="solutions-display"]').should("not.exist");
     });
   });
   describe("Setting up the game", () => {
@@ -64,6 +82,12 @@ describe("countdown game", () => {
         makeCardSelection();
         cy.get('[data-cy="show-solutions"]').should("be.disabled");
       });
+      // TODO - support this?
+      it.skip("should disable the start game button if a card is replaced", () => {
+        makeCardSelection();
+        removeACard(3, "little");
+        cy.get('[data-cy="start-game"]').should("be.disabled");
+      });
     });
   });
   describe("Playing the game", () => {
@@ -88,7 +112,10 @@ describe("countdown game", () => {
       playGame();
     });
     describe("Clicking show solutions", () => {
-      it("should show the solutions", () => {});
+      it("make the solutions block visible", () => {
+        showSolutions();
+        cy.get('[data-cy="solutions-display"]').should("exist");
+      });
     });
   });
 });
