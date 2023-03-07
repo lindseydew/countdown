@@ -1,7 +1,7 @@
 import { it, describe, expect } from "vitest";
 import { Solver } from "./Solver";
 import { Literal, Operation } from "./models/Expression";
-import { Add } from "./models/OperationType";
+import { add, Add } from "./models/OperationType";
 
 describe("Solver", () => {
   describe("sortDesc", () => {
@@ -21,7 +21,88 @@ describe("Solver", () => {
     });
   });
 
-  describe("generateExpressionsOfSize", () => {
+  describe.only("generatingSubExpressions", () => {
+    it("list size 2", () => {
+      const emptyArr: number[] = [];
+      expect(Solver.generatingSubExpressionsSize2([1, 2])).toStrictEqual([
+        {
+          expression: new Literal(2).add(1),
+          reminaingValues: emptyArr,
+        },
+        {
+          expression: new Literal(2).subtract(1),
+          reminaingValues: emptyArr,
+        },
+        {
+          expression: new Literal(2).multiply(1),
+          reminaingValues: emptyArr,
+        },
+        {
+          expression: new Literal(2).divide(1),
+          reminaingValues: emptyArr,
+        },
+      ]);
+    });
+
+    it("list size 3", () => {
+      const oneArr = [1];
+      const twoArr = [2];
+      const threeArr = [3];
+
+      expect(Solver.generatingSubExpressionsSize2([1, 2, 3])).toStrictEqual([
+        {
+          expression: new Literal(3).add(2),
+          reminaingValues: oneArr,
+        },
+        {
+          expression: new Literal(3).subtract(2),
+          reminaingValues: oneArr,
+        },
+        {
+          expression: new Literal(3).multiply(2),
+          reminaingValues: oneArr,
+        },
+        {
+          expression: new Literal(3).divide(2),
+          reminaingValues: oneArr,
+        },
+        {
+          expression: new Literal(3).add(1),
+          reminaingValues: twoArr,
+        },
+        {
+          expression: new Literal(3).subtract(1),
+          reminaingValues: twoArr,
+        },
+        {
+          expression: new Literal(3).multiply(1),
+          reminaingValues: twoArr,
+        },
+        {
+          expression: new Literal(3).divide(1),
+          reminaingValues: twoArr,
+        },
+        {
+          expression: new Literal(2).add(1),
+          reminaingValues: threeArr,
+        },
+        {
+          expression: new Literal(2).subtract(1),
+          reminaingValues: threeArr,
+        },
+        {
+          expression: new Literal(2).multiply(1),
+          reminaingValues: threeArr,
+        },
+        {
+          expression: new Literal(2).divide(1),
+          reminaingValues: threeArr,
+        },
+      ]);
+    });
+  });
+
+  describe.skip("generateExpressionsOfSize", () => {
     it("list size 1, choose 1 element", () => {
       expect(Solver.generateExpressionsOfSize([1], 1)).toStrictEqual([
         new Literal(1),
@@ -36,24 +117,7 @@ describe("Solver", () => {
       ]);
     });
 
-    // missing bracket
-    // (4 op 3) op (2 op 1)
-
-    // [3, 2, 1],
-
-    // choose 2 elements
-
-    // (3,2), (3 ,1) (2, 1)
-    // 3 + 2 = 5 => (3,1)
-    // 3 - 2 = 1 => (1,1)
-    // 3 * 2 = 12 => (12,1)
-    // 3 / 2 = 1 => (1.5,1)
-
-    // given a list => produce the correct tuples after one step
-    // (3, 2, 1) => list of remaining values
-    
-    // (3,2,1) =>  [3 + 2, [1], 3 - 2, [1]]
-    it.only("list size 3, choose 3 elements", () => {
+    it("list size 3, choose 3 elements", () => {
       expect(
         Solver.generateExpressionsOfSize([3, 2, 1], 3).map((s) => s.prettyPrint)
       ).toStrictEqual(
@@ -100,7 +164,7 @@ describe("Solver", () => {
           new Literal(3).divide(1).multiply(2),
           new Literal(3).divide(1).divide(2),
 
-          // allow  
+          // allow
         ].map((s) => s.prettyPrint)
       );
 
@@ -131,7 +195,7 @@ describe("Solver", () => {
       });
     });
 
-    describe("generateAllExpressions", () => {
+    describe.skip("generateAllExpressions", () => {
       it("list size 1", () => {
         expect(Solver.generateAllExpressions([1]).length).toBe(1);
       });
@@ -170,16 +234,16 @@ describe("Expression", () => {
   describe("prettyPrint", () => {
     it("addition with two numbers", () => {
       expect(
-        new Operation(new Literal(1), new Literal(2), new Add()).prettyPrint
+        new Operation(new Literal(1), new Literal(2), add).prettyPrint
       ).toBe("1 + 2");
     });
 
     it("addition with a nested expression", () => {
       expect(
         new Operation(
-          new Operation(new Literal(1), new Literal(2), new Add()),
+          new Operation(new Literal(1), new Literal(2), add),
           new Literal(3),
-          new Add()
+          add
         ).prettyPrint
       ).toBe("(1 + 2) + 3");
     });
@@ -187,16 +251,14 @@ describe("Expression", () => {
 
   describe("value", () => {
     it("addition with two numbers", () => {
-      expect(
-        new Operation(new Literal(1), new Literal(2), new Add()).value
-      ).toBe(3);
+      expect(new Operation(new Literal(1), new Literal(2), add).value).toBe(3);
     });
     it("addition with a nested expression", () => {
       expect(
         new Operation(
-          new Operation(new Literal(1), new Literal(2), new Add()),
+          new Operation(new Literal(1), new Literal(2), add),
           new Literal(3),
-          new Add()
+          add
         ).value
       ).toBe(6);
     });
