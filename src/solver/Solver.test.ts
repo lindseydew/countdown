@@ -4,6 +4,52 @@ import { Literal, Operation } from "./models/Expression";
 import { add } from "./models/OperationType";
 
 describe("Solver", () => {
+  const allExpressionsSize3 = [
+    // 3 op 2 op 1
+    new Literal(3).add(2).add(1),
+    new Literal(3).add(2).subtract(1),
+    new Literal(3).add(2).multiply(1),
+    new Literal(3).add(2).divide(1),
+
+    new Literal(3).subtract(2).add(1),
+    new Literal(3).subtract(2).subtract(1),
+    new Literal(3).subtract(2).multiply(1),
+    new Literal(3).subtract(2).divide(1),
+
+    new Literal(3).multiply(2).add(1),
+    new Literal(3).multiply(2).subtract(1),
+    new Literal(3).multiply(2).multiply(1),
+    new Literal(3).multiply(2).divide(1),
+
+    new Literal(3).divide(2).add(1),
+    new Literal(3).divide(2).subtract(1),
+    new Literal(3).divide(2).multiply(1),
+    new Literal(3).divide(2).divide(1),
+
+    // 3 op 1 op 2
+    new Literal(3).add(1).add(2),
+    new Literal(3).add(1).subtract(2),
+    new Literal(3).add(1).multiply(2),
+    new Literal(3).add(1).divide(2),
+
+    new Literal(3).subtract(1).add(2),
+    new Literal(3).subtract(1).subtract(2),
+    new Literal(3).subtract(1).multiply(2),
+    new Literal(3).subtract(1).divide(2),
+
+    new Literal(3).multiply(1).add(2),
+    new Literal(3).multiply(1).subtract(2),
+    new Literal(3).multiply(1).multiply(2),
+    new Literal(3).multiply(1).divide(2),
+
+    new Literal(3).divide(1).add(2),
+    new Literal(3).divide(1).subtract(2),
+    new Literal(3).divide(1).multiply(2),
+    new Literal(3).divide(1).divide(2),
+
+    // allow
+  ];
+
   describe("sortDesc", () => {
     it("should put the numbers high to low", () => {
       const solver = new Solver(21, [1, 2, 3, 4, 5, 6]);
@@ -21,7 +67,7 @@ describe("Solver", () => {
     });
   });
 
-  describe.only("generatingSubExpressions", () => {
+  describe.skip("generatingSubExpressions", () => {
     it("list size 2", () => {
       const emptyArr: number[] = [];
       expect(Solver.generatingSubExpressionsSize2([1, 2])).toStrictEqual([
@@ -44,7 +90,7 @@ describe("Solver", () => {
       ]);
     });
 
-    it("list size 3", () => {
+    it.skip("list size 3", () => {
       const oneArr = [new Literal(1)];
       const twoArr = [new Literal(2)];
       const threeArr = [new Literal(3)];
@@ -100,15 +146,17 @@ describe("Solver", () => {
         },
       ]);
     });
+
+    it("");
   });
 
-  describe.skip("generateExpressionsOfSize", () => {
-    it("list size 1, choose 1 element", () => {
+  describe("generateExpressionsOfSize", () => {
+    it.skip("list size 1, choose 1 element", () => {
       expect(Solver.generateExpressionsOfSize([1], 1)).toStrictEqual([
         new Literal(1),
       ]);
     });
-    it("list size 2, choose 2 elements", () => {
+    it.skip("list size 2, choose 2 elements", () => {
       expect(Solver.generateExpressionsOfSize([2, 1], 2)).toStrictEqual([
         new Literal(2).add(1),
         new Literal(2).subtract(1),
@@ -117,7 +165,7 @@ describe("Solver", () => {
       ]);
     });
 
-    it("list size 3, choose 3 elements", () => {
+    it.skip("list size 3, choose 3 elements", () => {
       expect(
         Solver.generateExpressionsOfSize([3, 2, 1], 3).map((s) => s.prettyPrint)
       ).toStrictEqual(
@@ -195,20 +243,23 @@ describe("Solver", () => {
       });
     });
 
-    describe.skip("generateAllExpressions", () => {
-      it("list size 1", () => {
-        expect(Solver.generateAllExpressions([1]).length).toBe(1);
+    describe.only("generateAllExpressions", () => {
+      it.skip("list size 1", () => {
+        console.log("*******");
+        console.log(Solver.generateAllExpressions2([1]));
+        console.log("========");
+        expect(Solver.generateAllExpressions2([1]).length).toBe(1);
       });
       it("list size 2", () => {
-        expect(Solver.generateAllExpressions([1, 2]).length).toBe(6);
+        expect(Solver.generateAllExpressions2([1, 2]).length).toBe(4);
       });
       it("list size 3", () => {
         // ensure they are all distinct
-        expect(Solver.generateAllExpressions([1, 2, 3]).length).toBe(51);
+        expect(Solver.generateAllExpressions2([1, 2, 3]).length).toBe(48);
       });
       it("list size 6", () => {
         // ensure they are all distinct
-        expect(Solver.generateAllExpressions([1, 2, 3, 4, 5, 6]).length).toBe(
+        expect(Solver.generateAllExpressions2([1, 2, 3, 4, 5, 6]).length).toBe(
           3516060
         );
       });

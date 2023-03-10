@@ -56,11 +56,7 @@ export class Solver {
     }
   }
 
-  static generatingSubExpressionsSize2(values: number[]): Temp[] {
-    const sortedValues = values
-      .sort()
-      .reverse()
-      .map((c) => new Literal(c));
+  static generatingSubExpressionsSize2(sortedValues: Expression[]): Temp[] {
     return this.chooseTwoValuesFromArray(sortedValues, []).flatMap((temp2) => {
       return [
         {
@@ -81,6 +77,33 @@ export class Solver {
         },
       ];
     });
+  }
+  static recurse(exp: Expression[], acc: Expression[]): Expression[] {
+    const temps = this.generatingSubExpressionsSize2(exp);
+    return temps.reduce<Expression[]>((exps, temp) => {
+      if (temp.remainingExpressions.length === 0) {
+        return [temp.expression, ...exps];
+      } else {
+        const temps2 = this.generatingSubExpressionsSize2([
+          temp.expression,
+          ...temp.remainingExpressions,
+        ]);
+        return temps2.reduce<Expression[]>((e, t) => {
+          return [
+            ...e,
+            ...this.recurse(t.remainingExpressions, [t.expression, ...e]),
+          ];
+        }, acc);
+      }
+    }, acc);
+  }
+
+  static generateAllExpressions2(values: number[]): Expression[] {
+    const sortedValues = values
+      .sort()
+      .reverse()
+      .map((c) => new Literal(c));
+    return this.recurse(sortedValues, []);
   }
   static generateExpressionsOfSize(
     values: number[],
