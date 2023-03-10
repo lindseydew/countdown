@@ -7,13 +7,13 @@ function choose(arr: number[], k: number, prefix: number[] = []): number[][] {
 }
 interface Temp {
   expression: Expression;
-  reminaingValues: number[];
+  remainingExpressions: Expression[];
 }
 
 interface Temp2 {
-  value1: number;
-  value2: number;
-  remainingValues: number[];
+  exp1: Expression;
+  exp2: Expression;
+  remainingExpressions: Expression[];
 }
 export class Solver {
   sortedValues: number[];
@@ -28,17 +28,20 @@ export class Solver {
     });
   }
 
-  static chooseTwoValuesFromArray(values: number[], temp: Temp2[]): Temp2[] {
-    if (values.length < 2) return temp;
+  static chooseTwoValuesFromArray(
+    expressions: Expression[],
+    temp: Temp2[]
+  ): Temp2[] {
+    if (expressions.length < 2) return temp;
     else {
-      return values
+      return expressions
         .flatMap((v1, i) => {
-          return values.map((v2, j) => {
+          return expressions.map((v2, j) => {
             if (j > i) {
               return {
-                value1: v1,
-                value2: v2,
-                remainingValues: values.filter(
+                exp1: v1,
+                exp2: v2,
+                remainingExpressions: expressions.filter(
                   (v, index) => index !== i && index !== j
                 ),
               };
@@ -54,24 +57,27 @@ export class Solver {
   }
 
   static generatingSubExpressionsSize2(values: number[]): Temp[] {
-    const sortedValues = values.sort().reverse();
+    const sortedValues = values
+      .sort()
+      .reverse()
+      .map((c) => new Literal(c));
     return this.chooseTwoValuesFromArray(sortedValues, []).flatMap((temp2) => {
       return [
         {
-          expression: new Literal(temp2.value1).add(temp2.value2),
-          reminaingValues: temp2.remainingValues,
+          expression: temp2.exp1.add(temp2.exp2.value),
+          remainingExpressions: temp2.remainingExpressions,
         },
         {
-          expression: new Literal(temp2.value1).subtract(temp2.value2),
-          reminaingValues: temp2.remainingValues,
+          expression: temp2.exp1.subtract(temp2.exp2.value),
+          remainingExpressions: temp2.remainingExpressions,
         },
         {
-          expression: new Literal(temp2.value1).multiply(temp2.value2),
-          reminaingValues: temp2.remainingValues,
+          expression: temp2.exp1.multiply(temp2.exp2.value),
+          remainingExpressions: temp2.remainingExpressions,
         },
         {
-          expression: new Literal(temp2.value1).divide(temp2.value2),
-          reminaingValues: temp2.remainingValues,
+          expression: temp2.exp1.divide(temp2.exp2.value),
+          remainingExpressions: temp2.remainingExpressions,
         },
       ];
     });
