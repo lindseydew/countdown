@@ -89,10 +89,14 @@ export class Solver {
           ...temp.remainingExpressions,
         ]);
         return temps2.reduce<Expression[]>((e, t) => {
-          return [
-            ...e,
-            ...this.recurse(t.remainingExpressions, [t.expression, ...e]),
-          ];
+          if (t.remainingExpressions.length === 0) {
+            return [...e, t.expression];
+          } else {
+            return [
+              ...e,
+              ...this.recurse(t.remainingExpressions, [t.expression, ...e]),
+            ];
+          }
         }, acc);
       }
     }, acc);

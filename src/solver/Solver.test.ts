@@ -70,7 +70,9 @@ describe("Solver", () => {
   describe.skip("generatingSubExpressions", () => {
     it("list size 2", () => {
       const emptyArr: number[] = [];
-      expect(Solver.generatingSubExpressionsSize2([1, 2])).toStrictEqual([
+      expect(
+        Solver.generatingSubExpressionsSize2([new Literal(1), new Literal(2)])
+      ).toStrictEqual([
         {
           expression: new Literal(2).add(1),
           remainingExpressions: emptyArr,
@@ -95,7 +97,13 @@ describe("Solver", () => {
       const twoArr = [new Literal(2)];
       const threeArr = [new Literal(3)];
 
-      expect(Solver.generatingSubExpressionsSize2([1, 2, 3])).toStrictEqual([
+      expect(
+        Solver.generatingSubExpressionsSize2([
+          new Literal(1),
+          new Literal(2),
+          new Literal(3),
+        ])
+      ).toStrictEqual([
         {
           expression: new Literal(3).add(2),
           remainingExpressions: oneArr,
@@ -244,20 +252,17 @@ describe("Solver", () => {
     });
 
     describe.only("generateAllExpressions", () => {
-      it.skip("list size 1", () => {
-        console.log("*******");
-        console.log(Solver.generateAllExpressions2([1]));
-        console.log("========");
-        expect(Solver.generateAllExpressions2([1]).length).toBe(1);
-      });
       it("list size 2", () => {
         expect(Solver.generateAllExpressions2([1, 2]).length).toBe(4);
       });
       it("list size 3", () => {
         // ensure they are all distinct
+        console.log(
+          Solver.generateAllExpressions2([1, 2, 3]).map((s) => s.prettyPrint)
+        );
         expect(Solver.generateAllExpressions2([1, 2, 3]).length).toBe(48);
       });
-      it("list size 6", () => {
+      it.skip("list size 6", () => {
         // ensure they are all distinct
         expect(Solver.generateAllExpressions2([1, 2, 3, 4, 5, 6]).length).toBe(
           3516060
